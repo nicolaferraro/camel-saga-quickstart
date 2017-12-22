@@ -3,7 +3,8 @@
 This quickstarts demonstrates how to use the new saga feature of Camel 2.21.
 
 The `camel-saga-app` module has the following route:
-```
+
+```java
 from("timer:clock?period=5s")
   .saga()
     .setHeader("id", header(Exchange.TIMER_COUNTER))
@@ -24,7 +25,7 @@ the other actions are compensated (cancelled) automatically.
 
 Each atomic action declares its corresponding compensating action using the new Saga EIP DSL:
 
-```
+```java
 rest().post("/train/buy/seat")
   .param().type(RestParamType.header).name("id").required(true).endParam()
   .route()
