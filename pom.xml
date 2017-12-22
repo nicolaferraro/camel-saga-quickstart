@@ -6,13 +6,20 @@
 
     <groupId>me.nicolaferraro.quickstarts</groupId>
     <artifactId>camel-saga-quickstart</artifactId>
+    <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <modules>
+        <module>camel-saga-app</module>
+        <module>camel-saga-train-service</module>
+        <module>camel-saga-flight-service</module>
+        <module>camel-saga-payment-service</module>
+    </modules>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <spring-boot.version>1.5.6.RELEASE</spring-boot.version>
+        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
         <camel.version>2.21.0-SNAPSHOT</camel.version>
     </properties>
 
@@ -34,24 +41,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-lra-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.camel</groupId>
-            <artifactId>camel-undertow-starter</artifactId>
-        </dependency>
-
-    </dependencies>
 
     
 </project>
