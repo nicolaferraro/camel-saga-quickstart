@@ -1,6 +1,5 @@
 package me.nicolaferraro.quickstarts.saga.train;
 
-import org.apache.camel.Exchange;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.model.SagaPropagation;
 import org.apache.camel.model.rest.RestParamType;
@@ -18,10 +17,7 @@ public class CamelSagaTrainService {
     @Component
     static class Routes extends RouteBuilder {
         @Override
-        public void configure() throws Exception {
-
-            restConfiguration().port(8282);
-
+        public void configure() {
 
             rest().post("/train/buy/seat")
                     .param().type(RestParamType.header).name("id").required(true).endParam()
@@ -30,7 +26,9 @@ public class CamelSagaTrainService {
                         .propagation(SagaPropagation.SUPPORTS)
                         .option("id", header("id"))
                         .compensation("direct:cancelPurchase")
-                    .log("Buying train seat #${header.id}");
+                    .log("Buying train seat #${header.id}")
+                    .to("http4://camel-saga-payment-service:8080/api/pay?bridgeEndpoint=true&type=train")
+                    .log("Payment for train #${header.id} done");
 
             from("direct:cancelPurchase")
                     .log("Train purchase #${header.id} has been cancelled");

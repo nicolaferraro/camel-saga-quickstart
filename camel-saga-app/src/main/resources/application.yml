@@ -1,8 +1,11 @@
 camel:
-  springboot:
-    main-run-controller: true
   service:
     lra:
       enabled: true
       coordinator-url: http://localhost:8080
-      local-participant-url: http://localhost:8181
+      local-participant-url: http://localhost:8080/api
+  component:
+    servlet:
+      mapping:
+        context-path: /api/*
+

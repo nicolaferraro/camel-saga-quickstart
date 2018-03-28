@@ -29,7 +29,9 @@ public class CamelSagaFlightService {
                         .propagation(SagaPropagation.MANDATORY)
                         .option("id", header("id"))
                         .compensation("direct:cancelPurchase")
-                    .log("Buying flight #${header.id}");
+                    .log("Buying flight #${header.id}")
+                    .to("http4://camel-saga-payment-service:8080/api/pay?type=flight")
+                    .log("Payment for flight #${header.id} done");
 
             from("direct:cancelPurchase")
                     .log("Flight purchase #${header.id} has been cancelled");

@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: DeploymentConfig
+metadata:
+  generation: 1
+  labels:
+    app: lra-coordinator
+    template: lra-coordinator
+  name: lra-coordinator
+spec:
+  replicas: 1
+  selector:
+    app: lra-coordinator
+    deploymentconfig: lra-coordinator
+  strategy:
+    activeDeadlineSeconds: 21600
+    resources: {}
+    rollingParams:
+      intervalSeconds: 1
+      maxSurge: 25%
+      maxUnavailable: 25%
+      timeoutSeconds: 600
+      updatePeriodSeconds: 1
+    type: Rolling
+  template:
+    metadata:
+      labels:
+        app: lra-coordinator
+        deploymentconfig: lra-coordinator
+    spec:
+      containers:
+      - imagePullPolicy: IfNotPresent
+        livenessProbe:
+          httpGet:
+            path: /lra-coordinator
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 180
+        name: lra-coordinator
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        readinessProbe:
+          httpGet:
+            path: /lra-coordinator
+            port: 8080
+            scheme: HTTP
+          initialDelaySeconds: 10
+        volumeMounts:
+        - mountPath: /data
+          name: lra-coordinator-data
+      volumes:
+      - name: lra-coordinator-data
+        persistentVolumeClaim:
+          claimName: lra-coordinator
+  triggers:
+  - type: ConfigChange
+  - imageChangeParams:
+      automatic: true
+      containerNames:
+      - lra-coordinator
+      from:
+        kind: ImageStreamTag
+        name: lra-coordinator:latest
+    type: ImageChange

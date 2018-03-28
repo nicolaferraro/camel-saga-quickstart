@@ -19,19 +19,17 @@ public class CamelSagaPaymentService {
         @Override
         public void configure() throws Exception {
 
-            restConfiguration().port(8484);
-
-
             rest().post("/pay")
+                    .param().type(RestParamType.query).name("type").required(true).endParam()
                     .param().type(RestParamType.header).name("id").required(true).endParam()
                     .route()
                     .saga()
                         .propagation(SagaPropagation.MANDATORY)
                         .option("id", header("id"))
                         .compensation("direct:cancelPayment")
-                    .log("Paying for order #${header.id}")
+                    .log("Paying ${header.type} for order #${header.id}")
                     .choice()
-                        .when(x -> Math.random() >= 0.7)
+                        .when(x -> Math.random() >= 0.85)
                             .throwException(new RuntimeException("Random failure during payment"))
                     .end();
 

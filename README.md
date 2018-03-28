@@ -2,6 +2,9 @@
 
 This quickstarts demonstrates how to use the new saga feature of Camel 2.21.
 
+It runs on **Kubernetes** or **Openshift**. You can install a development version, like [Minishift](https://github.com/minishift/minishift/releases)
+or [Minikube](https://github.com/kubernetes/minikube/releases).
+
 The `camel-saga-app` module has the following route:
 
 ```java
@@ -10,20 +13,21 @@ from("timer:clock?period=5s")
     .setHeader("id", header(Exchange.TIMER_COUNTER))
     .setHeader(Exchange.HTTP_METHOD, constant("POST"))
     .log("Executing saga #${header.id}")
-    .to("undertow:http://localhost:8282/train/buy/seat")
-    .to("undertow:http://localhost:8383/flight/buy")
-    .to("undertow:http://localhost:8484/pay");
+    .to("http4://camel-saga-train-service:8080/api/train/buy/seat")
+    .to("http4://camel-saga-flight-service:8080/api/flight/buy");
 ```
 
-It executes *3 remote actions* within a saga:
+It executes *2 remote actions* within a saga:
 - Buy a train ticket
 - Buy an airplane ticket
-- Make the payment (*last action, it fails with 30% probability*)
 
-Since all 3 actions are executed in the context of a saga, whenever the payment action fails, 
-the other actions are compensated (cancelled) automatically.
+Each action in turn will make a call to the payment service *within the context of the saga*. *Calls to payment fail with 15% probability*.
 
-Each atomic action declares its corresponding compensating action using the new Saga EIP DSL:
+Since all actions are executed in the context of a saga, whenever one of the payment action fails (or another action, for any reason), 
+the whole saga is compensated (cancelled) automatically.
+
+Each atomic action declares its corresponding compensating action using the new Saga EIP DSL. For example, the train 
+route is:
 
 ```java
 rest().post("/train/buy/seat")
@@ -33,56 +37,28 @@ rest().post("/train/buy/seat")
     .propagation(SagaPropagation.SUPPORTS)
     .option("id", header("id"))
     .compensation("direct:cancelPurchase") // <-- compensation
-      .log("Buying train seat #${header.id}");
-    
-from("direct:cancelPurchase") // <-- points to this
+  .log("Buying train seat #${header.id}")
+  .to("http4://camel-saga-payment-service:8080/api/pay?bridgeEndpoint=true&type=train")
+  .log("Payment for train #${header.id} done");
+
+from("direct:cancelPurchase") // <-- compensation points to this
   .log("Train purchase #${header.id} has been cancelled");
 ```
 
 ## Requirements
 
-### LRA Coordinator
+### Openshift or Kubernetes
 
-This quickstart needs to communicate with a LRA coordinator. You may start the Narayana LRA coordinator from https://github.com/jbosstm/narayana/tree/master/rts/lra/lra-coordinator, 
-that listens on `8080` by default.
-
-Checkout the Narayana repository, build and run:
-
-```
-# from the lra-coordinator dir
-mvn wildfly-swarm:run
-``` 
-
-### Camel 2.21.0-SNAPSHOT
-
-Camel needs to be built from this branch: https://github.com/nicolaferraro/camel/tree/saga, with:
-
-```
-mvn clean install -P fastinstall
-```
+You can install [Minishift](https://github.com/minishift/minishift/releases) or [Minikube](https://github.com/kubernetes/minikube/releases).
 
 ## Running the demo
 
-```
-# Terminal 1
-cd camel-saga-train-service
-mvn spring-boot:run
-```
+This project uses the [Fabric8 Maven Plugin](https://maven.fabric8.io/) to deploy itself automatically to Openshift or Kubernetes.
+
+After you connect to the cluster, type the following command on a terminal from the repository root:
 
 ```
-# Terminal 2
-cd camel-saga-flight-service
-mvn spring-boot:run
+mvn clean fabric8:deploy
 ```
 
-```
-# Terminal 3
-cd camel-saga-payment-service
-mvn spring-boot:run
-```
-
-```
-# Terminal 4
-cd camel-saga-app
-mvn spring-boot:run
-```
+Look into Openshift/Kubernetes console, all components will be deployed. You can follow the logs of the different services to see compensating actions.

@@ -13,14 +13,19 @@
         <module>camel-saga-train-service</module>
         <module>camel-saga-flight-service</module>
         <module>camel-saga-payment-service</module>
+        <module>lra-coordinator</module>
     </modules>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <spring-boot.version>1.5.9.RELEASE</spring-boot.version>
-        <camel.version>2.21.0-SNAPSHOT</camel.version>
+        <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
+        <camel.version>2.21.0</camel.version>
+
+
+        <fabric8-maven-plugin.version>3.5-SNAPSHOT</fabric8-maven-plugin.version>
+        <fabric8-kubernetes-api-hack.version>3.0-SNAPSHOT</fabric8-kubernetes-api-hack.version> <!-- Avoid replacing PVC -->
     </properties>
 
     <dependencyManagement>
@@ -41,6 +46,22 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>io.fabric8</groupId>
+                <artifactId>fabric8-maven-plugin</artifactId>
+                <version>${fabric8-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <goals /> <!-- Do not bind by default -->
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     
 </project>

@@ -18,16 +18,14 @@ public class CamelSagaApp {
     static class Routes extends RouteBuilder {
         @Override
         public void configure() throws Exception {
-            restConfiguration().port(8181);
 
             from("timer:clock?period=5s")
                     .saga()
                         .setHeader("id", header(Exchange.TIMER_COUNTER))
                         .setHeader(Exchange.HTTP_METHOD, constant("POST"))
                         .log("Executing saga #${header.id}")
-                        .to("undertow:http://localhost:8282/train/buy/seat")
-                        .to("undertow:http://localhost:8383/flight/buy")
-                        .to("undertow:http://localhost:8484/pay");
+                        .to("http4://camel-saga-train-service:8080/api/train/buy/seat")
+                        .to("http4://camel-saga-flight-service:8080/api/flight/buy");
 
         }
     }
