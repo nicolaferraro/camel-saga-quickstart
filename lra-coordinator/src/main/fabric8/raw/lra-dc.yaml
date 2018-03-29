@@ -12,15 +12,7 @@ spec:
     app: lra-coordinator
     deploymentconfig: lra-coordinator
   strategy:
-    activeDeadlineSeconds: 21600
-    resources: {}
-    rollingParams:
-      intervalSeconds: 1
-      maxSurge: 25%
-      maxUnavailable: 25%
-      timeoutSeconds: 600
-      updatePeriodSeconds: 1
-    type: Rolling
+    type: Recreate
   template:
     metadata:
       labels:
@@ -29,6 +21,9 @@ spec:
     spec:
       containers:
       - imagePullPolicy: IfNotPresent
+        env:
+        - name: AB_JOLOKIA_OFF
+          value: true
         livenessProbe:
           httpGet:
             path: /lra-coordinator
