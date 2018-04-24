@@ -13,7 +13,6 @@
         <module>camel-saga-train-service</module>
         <module>camel-saga-flight-service</module>
         <module>camel-saga-payment-service</module>
-        <module>lra-coordinator</module>
     </modules>
 
     <properties>

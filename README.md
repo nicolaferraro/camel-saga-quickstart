@@ -53,7 +53,7 @@ from("direct:cancelPurchase") // <-- compensation points to this
 
 ### Openshift or Kubernetes
 
-You can install [Minishift](https://github.com/minishift/minishift/releases) or [Minikube](https://github.com/kubernetes/minikube/releases).
+You can install [Minishift](https://github.com/minishift/minishift/releases).
 
 ## Running the demo
 
@@ -62,6 +62,7 @@ This project uses the [Fabric8 Maven Plugin](https://maven.fabric8.io/) to deplo
 After you connect to the cluster, type the following command on a terminal from the repository root:
 
 ```
+oc create -f lra-coordinator.yaml
 mvn clean fabric8:deploy
 ```
 
