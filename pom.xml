@@ -24,8 +24,7 @@
         <camel.version>2.21.0</camel.version>
 
 
-        <fabric8-maven-plugin.version>3.5-SNAPSHOT</fabric8-maven-plugin.version>
-        <fabric8-kubernetes-api-hack.version>3.0-SNAPSHOT</fabric8-kubernetes-api-hack.version> <!-- Avoid replacing PVC -->
+        <fabric8-maven-plugin.version>3.5.38</fabric8-maven-plugin.version>
     </properties>
 
     <dependencyManagement>

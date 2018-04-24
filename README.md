@@ -5,6 +5,10 @@ This quickstarts demonstrates how to use the new saga feature of Camel 2.21.
 It runs on **Kubernetes** or **Openshift**. You can install a development version, like [Minishift](https://github.com/minishift/minishift/releases)
 or [Minikube](https://github.com/kubernetes/minikube/releases).
 
+<p style="text-align: center">
+    <img src="/saga-quickstart-system.png" alt="Saga Quickstart System"/>
+</p>
+
 The `camel-saga-app` module has the following route:
 
 ```java

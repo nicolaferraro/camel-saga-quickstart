@@ -25,14 +25,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <dependencies>
-                    <dependency>
-                        <groupId>io.fabric8</groupId>
-                        <artifactId>kubernetes-api</artifactId>
-                        <version>${fabric8-kubernetes-api-hack.version}</version>
-                        <!-- To avoid to rebind PVC -->
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>
