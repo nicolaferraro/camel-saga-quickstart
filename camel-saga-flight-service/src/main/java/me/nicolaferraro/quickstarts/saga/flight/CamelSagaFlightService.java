@@ -30,7 +30,7 @@ public class CamelSagaFlightService {
                         .option("id", header("id"))
                         .compensation("direct:cancelPurchase")
                     .log("Buying flight #${header.id}")
-                    .to("http4://camel-saga-payment-service:8080/api/pay?type=flight")
+                    .to("http4://camel-saga-payment-service:8080/api/pay?bridgeEndpoint=true&type=flight")
                     .log("Payment for flight #${header.id} done");
 
             from("direct:cancelPurchase")
