@@ -3,3 +3,7 @@
 target
 .metadata
 .project
+.settings
+.vscode
+.classpath
+bin
