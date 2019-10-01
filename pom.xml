@@ -19,15 +19,24 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
 
-        <spring-boot.version>1.5.10.RELEASE</spring-boot.version>
+        <spring-boot.version>1.5.19.RELEASE</spring-boot.version>
         <camel.version>2.21.0</camel.version>
 
 
         <fabric8-maven-plugin.version>3.5.38</fabric8-maven-plugin.version>
+        <fuse.version>7.4.0.fuse-740036-redhat-00002</fuse.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.jboss.redhat-fuse</groupId>
+                <artifactId>fuse-springboot-bom</artifactId>
+                <version>${fuse.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>  
+            <!--          
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-dependencies</artifactId>
@@ -42,6 +51,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            -->
         </dependencies>
     </dependencyManagement>
 
@@ -51,7 +61,7 @@
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>fabric8-maven-plugin</artifactId>
-                <version>${fabric8-maven-plugin.version}</version>
+                <!-- version>${fabric8-maven-plugin.version}</version -->
                 <executions>
                     <execution>
                         <goals /> <!-- Do not bind by default -->

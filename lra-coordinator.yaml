@@ -44,10 +44,10 @@ items:
     tags:
     - from:
         kind: DockerImage
-        name: docker.io/jbosstm/lra-coordinator:5.8.2.Final
+        name: docker.io/jbosstm/lra-coordinator:5.9.8.Final
       generation: 0
       importPolicy: {}
-      name: "5.8.2.Final"
+      name: "5.9.8.Final"
       referencePolicy:
         type: Source
 - apiVersion: v1
@@ -107,5 +107,5 @@ items:
         - lra-coordinator
         from:
           kind: ImageStreamTag
-          name: "lra-coordinator:5.8.2.Final"
+          name: "lra-coordinator:5.9.8.Final"
       type: ImageChange
