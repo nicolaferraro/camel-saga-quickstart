@@ -12,6 +12,18 @@
     <artifactId>camel-saga-app</artifactId>
 
     <dependencies>
+        <!-- Swagger UI -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>swagger-ui</artifactId>
+            <version>3.13.0</version>
+        </dependency>        
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>webjars-locator</artifactId>
+            <version>0.33</version>
+        </dependency>
+    
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -30,7 +42,21 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-
+		<dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jackson-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-swagger-java-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.ws.rs</groupId>
+                    <artifactId>jsr311-api</artifactId>
+                </exclusion>
+            </exclusions>            
+        </dependency>        
+    
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-lra-starter</artifactId>
@@ -45,7 +71,6 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http4-starter</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

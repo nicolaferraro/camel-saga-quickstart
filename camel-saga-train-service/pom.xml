@@ -45,7 +45,6 @@
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-http4-starter</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

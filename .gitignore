@@ -6,4 +6,5 @@ target
 .settings
 .vscode
 .classpath
+.factorypath
 bin
