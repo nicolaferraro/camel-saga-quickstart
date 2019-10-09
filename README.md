@@ -12,13 +12,23 @@ or [Minikube](https://github.com/kubernetes/minikube/releases).
 The `camel-saga-app` module has the following route:
 
 ```java
-from("timer:clock?period=5s")
-  .saga()
-    .setHeader("id", header(Exchange.TIMER_COUNTER))
-    .setHeader(Exchange.HTTP_METHOD, constant("POST"))
-    .log("Executing saga #${header.id}")
-    .to("http4://camel-saga-train-service:8080/api/train/buy/seat")
-    .to("http4://camel-saga-flight-service:8080/api/flight/buy");
+  rest()
+      .post("/saga/start").description("Initiate a new reservation SAGA request...")
+      .route().routeId("reservation")
+      .log("Make a new reservation.")
+      .saga()
+          .setHeader("id", header(Exchange.TIMER_COUNTER))
+          .setHeader(Exchange.HTTP_METHOD, constant("POST"))
+          .log("Executing saga #${header.id}")
+          .to("http4://camel-saga-train-service:8080/api/train/buy/seat?bridgeEndpoint=true")
+          .to("http4://camel-saga-flight-service:8080/api/flight/buy?bridgeEndpoint=true")
+  .endRest();
+```
+
+You can start a new SAGA request with:
+
+```
+curl -X POST "http://localhost:8080/api/saga/start" -H "accept: application/json"
 ```
 
 It executes *2 remote actions* within a saga:
